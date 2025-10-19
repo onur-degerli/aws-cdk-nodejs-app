@@ -37,6 +37,14 @@ export class ApprunnerApiStack extends cdk.Stack {
         },
         autoDeploymentsEnabled: true,
       },
+      healthCheckConfiguration: {
+        path: '/',
+        protocol: 'HTTP',
+        interval: 10,
+        timeout: 5,
+        healthyThreshold: 1,
+        unhealthyThreshold: 5,
+      },
       instanceConfiguration: {
         cpu: '1024',
         memory: '2048',
