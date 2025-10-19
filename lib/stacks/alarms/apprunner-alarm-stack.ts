@@ -8,6 +8,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 import * as iam from 'aws-cdk-lib/aws-iam';
 import * as path from 'path';
+import { NodejsFunction } from 'aws-cdk-lib/aws-lambda-nodejs';
 
 interface AppRunnerAlarmStackProps extends cdk.StackProps {
   serviceName: string;
@@ -27,12 +28,27 @@ export class AppRunnerAlarmStack extends cdk.Stack {
     });
     alarmTopic.addSubscription(new subs.SqsSubscription(alarmQueue));
 
-    const notifierLambda = new lambda.Function(this, 'NotifierLambda', {
+    /* const notifierLambda = new lambda.Function(this, 'NotifierLambda', {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/alarm-lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/alarm')),
       environment: {
         SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL ?? '',
+      },
+    }); */
+
+    const notifierLambda = new NodejsFunction(this, 'NotifierLambda', {
+      entry: path.join(__dirname, '../../lambda/alarm/index.ts'),
+      handler: 'handler',
+      runtime: lambda.Runtime.NODEJS_22_X,
+      environment: {
+        SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL ?? '',
+      },
+      bundling: {
+        minify: true,
+        externalModules: ['aws-sdk'],
+        target: 'es2020',
+        sourceMap: true,
       },
     });
 
