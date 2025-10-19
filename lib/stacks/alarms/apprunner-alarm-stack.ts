@@ -1,9 +1,13 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import * as cloudwatch from 'aws-cdk-lib/aws-cloudwatch';
+import * as sns from 'aws-cdk-lib/aws-sns';
+import * as subs from 'aws-cdk-lib/aws-sns-subscriptions';
 import * as sqs from 'aws-cdk-lib/aws-sqs';
+import * as lambda from 'aws-cdk-lib/aws-lambda';
+import * as lambdaEventSources from 'aws-cdk-lib/aws-lambda-event-sources';
 import * as iam from 'aws-cdk-lib/aws-iam';
-import { ServiceNamespace } from 'aws-cdk-lib/aws-applicationautoscaling';
+import * as path from 'path';
 
 interface AppRunnerAlarmStackProps extends cdk.StackProps {
   serviceName: string;
@@ -15,16 +19,24 @@ export class AppRunnerAlarmStack extends cdk.Stack {
 
     const alarmQueue = new sqs.Queue(this, 'AppRunnerAlarmQueue', {
       queueName: 'app-runner-alarms',
-      visibilityTimeout: cdk.Duration.seconds(30),
+      visibilityTimeout: cdk.Duration.seconds(60),
     });
 
-    alarmQueue.addToResourcePolicy(
-      new iam.PolicyStatement({
-        actions: ['sqs:SendMessage'],
-        principals: [new iam.ServicePrincipal('cloudwatch.amazonaws.com')],
-        resources: [alarmQueue.queueArn],
-      })
-    );
+    const alarmTopic = new sns.Topic(this, 'AppRunnerAlarmTopic', {
+      displayName: 'App Runner Alarms',
+    });
+    alarmTopic.addSubscription(new subs.SqsSubscription(alarmQueue));
+
+    const notifierLambda = new lambda.Function(this, 'NotifierLambda', {
+      runtime: lambda.Runtime.NODEJS_22_X,
+      handler: 'index.handler',
+      code: lambda.Code.fromAsset(path.join(__dirname, 'lambda/alarm-lambda')),
+      environment: {
+        SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL ?? '',
+      },
+    });
+
+    notifierLambda.addEventSource(new lambdaEventSources.SqsEventSource(alarmQueue));
 
     const cpuAlarm = new cloudwatch.Alarm(this, 'HighCPUAlarm', {
       metric: new cloudwatch.Metric({
@@ -58,13 +70,14 @@ export class AppRunnerAlarmStack extends cdk.Stack {
       alarmDescription: 'Triggered when Memory exceeds 80%',
     });
 
-    cpuAlarm.addAlarmAction({
-      bind: () => ({ alarmActionArn: alarmQueue.queueArn }),
+    [cpuAlarm, memoryAlarm].forEach((alarm) => {
+      alarm.addAlarmAction({
+        bind: () => ({ alarmActionArn: alarmTopic.topicArn }),
+      });
     });
 
-    memoryAlarm.addAlarmAction({
-      bind: () => ({ alarmActionArn: alarmQueue.queueArn }),
-    });
+    alarmQueue.grantConsumeMessages(notifierLambda);
+    alarmTopic.grantPublish(new iam.ServicePrincipal('cloudwatch.amazonaws.com'));
 
     new cdk.CfnOutput(this, 'AlarmQueueUrl', {
       value: alarmQueue.queueUrl,
