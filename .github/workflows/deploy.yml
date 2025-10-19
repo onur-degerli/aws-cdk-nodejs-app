@@ -9,22 +9,42 @@ permissions:
   contents: read
 
 jobs:
-  - name: Checkout code
-    uses: actions/checkout@v4
+  deploy:
+    name: CDK Deploy
+    runs-on: ubuntu-latest
 
-  - name: Setup Node.js
-    uses: actions/setup-node@v4
-    with:
-      node-version: 22
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
 
-  - name: Install dependencies
-    run: npm ci
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
 
-  - name: Bootstrap CDK (first-time only)
-    run: npx cdk bootstrap aws://$AWS_ACCOUNT_ID/$AWS_REGION
-    env:
-      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      AWS_REGION: ${{ secrets.AWS_REGION }}
-    run: | 
-      npx cdk deploy --require-approval never
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Cache npm
+        uses: actions/cache@v4
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      - name: Bootstrap CDK (first-time only)
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          npx cdk bootstrap aws://$(aws sts get-caller-identity --query Account --output text)/${AWS_REGION}
+
+      - name: Deploy CDK stack
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          AWS_REGION: ${{ secrets.AWS_REGION }}
+        run: |
+          npx cdk deploy --require-approval never
