@@ -1,9 +1,11 @@
 name: Deploy to AWS App Runner
 
 on:
-  push:
-    branches:
-      - main
+  workflow_dispatch:
+
+  # push:
+  # branches:
+  # - main
 
 permissions:
   contents: read
