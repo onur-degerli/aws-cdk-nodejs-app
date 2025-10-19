@@ -6,7 +6,7 @@ import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as iam from 'aws-cdk-lib/aws-iam';
 
 export class ApprunnerApiStack extends cdk.Stack {
-  public readonly appRunnerServiceName: string;
+  public readonly appRunnerServiceName: string = 'app-runner-service';
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
@@ -26,6 +26,7 @@ export class ApprunnerApiStack extends cdk.Stack {
     });
 
     const appRunnerService = new apprunner.CfnService(this, 'AppRunnerService', {
+      serviceName: this.appRunnerServiceName,
       sourceConfiguration: {
         authenticationConfiguration: {
           accessRoleArn: apprunnerAccessRole.roleArn,
@@ -69,8 +70,6 @@ export class ApprunnerApiStack extends cdk.Stack {
     new cdk.CfnOutput(this, 'AppRunnerServiceUrl', {
       value: appRunnerService.attrServiceUrl,
     });
-
-    this.appRunnerServiceName = appRunnerService.ref;
 
     new cdk.CfnOutput(this, 'ApiGatewayUrl', {
       value: api.url,

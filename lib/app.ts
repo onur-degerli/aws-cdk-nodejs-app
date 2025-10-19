@@ -29,7 +29,6 @@ export class App extends cdk.Stack {
     new AppRunnerAlarmStack(this, 'AppRunnerAlarmStack', {
       env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
-        region: 'eu-north-1',
       },
       serviceName: apprunnerApiStack.appRunnerServiceName,
     });
