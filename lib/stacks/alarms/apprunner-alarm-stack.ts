@@ -30,7 +30,7 @@ export class AppRunnerAlarmStack extends cdk.Stack {
     const notifierLambda = new lambda.Function(this, 'NotifierLambda', {
       runtime: lambda.Runtime.NODEJS_22_X,
       handler: 'index.handler',
-      code: lambda.Code.fromAsset(path.join(__dirname, 'lambda/alarm-lambda')),
+      code: lambda.Code.fromAsset(path.join(__dirname, '../../lambda/alarm-lambda')),
       environment: {
         SLACK_WEBHOOK_URL: process.env.SLACK_WEBHOOK_URL ?? '',
       },
