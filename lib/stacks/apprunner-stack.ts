@@ -5,7 +5,7 @@ import * as apprunner from 'aws-cdk-lib/aws-apprunner';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as iam from 'aws-cdk-lib/aws-iam';
 
-export class ApprunnerApiStack extends cdk.Stack {
+export class ApprunnerStack extends cdk.Stack {
   public readonly appRunnerServiceName: string = 'app-runner-service';
 
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {

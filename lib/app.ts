@@ -2,18 +2,25 @@ import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
 import { S3Stack } from './stacks/s3-stack';
 import { EC2Stack } from './stacks/ec2-stack';
-import { ApprunnerApiStack } from './stacks/apprunner-api-stack';
+import { ApprunnerStack } from './stacks/apprunner-stack';
 import { AppRunnerAlarmStack } from './stacks/alarms/apprunner-alarm-stack';
+import { SecretManagerStack } from './stacks/secret-manager-stack';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class App extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    const apprunnerApiStack = new ApprunnerApiStack(this, 'AppRunner', {
+    const apprunnerStack = new ApprunnerStack(this, 'AppRunner', {
       env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
         region: 'eu-central-1',
+      },
+    });
+
+    const secretStack = new SecretManagerStack(this, 'SecretManagerStack', {
+      env: {
+        account: process.env.CDK_DEFAULT_ACCOUNT,
       },
     });
 
@@ -21,7 +28,8 @@ export class App extends cdk.Stack {
       env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
       },
-      serviceName: apprunnerApiStack.appRunnerServiceName,
+      serviceName: apprunnerStack.appRunnerServiceName,
+      appSecret: secretStack.appSecret,
     });
   }
 }

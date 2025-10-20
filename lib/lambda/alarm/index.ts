@@ -1,25 +1,24 @@
 import https from 'https';
-import { SQSEvent } from 'aws-lambda';
+import { SNSEvent } from 'aws-lambda';
+import { initializeSecrets } from '../../config';
 
-export const handler = async (event: SQSEvent): Promise<{ statusCode: number }> => {
-  const webhookUrl = process.env.SLACK_WEBHOOK_URL;
+export const handler = async (event: SNSEvent): Promise<{ statusCode: number }> => {
+  const webhookUrl = (await initializeSecrets(process.env.APP_SECRET_ARN!)).slackWebhookUrl;
   if (!webhookUrl) {
-    console.error('Missing SLACK_WEBHOOK_URL environment variable.');
+    console.error('Missing SLACK_WEBHOOK_URL.');
     return { statusCode: 500 };
   }
 
   for (const record of event.Records) {
     try {
-      const body = JSON.parse(record.body);
-      const message = JSON.parse(body.Message);
+      const snsMessage = record.Sns.Message;
+      const message = JSON.parse(snsMessage);
 
       const text = `🚨 *CloudWatch Alarm:* ${message.AlarmName}
 State: ${message.NewStateValue}
 Reason: ${message.NewStateReason}`;
 
-      const payload = JSON.stringify({ text });
-
-      await sendToSlack(webhookUrl, payload);
+      await sendToSlack(webhookUrl, JSON.stringify({ text }));
     } catch (err) {
       console.error('Error processing record:', err);
     }
