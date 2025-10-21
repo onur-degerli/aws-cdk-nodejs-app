@@ -1,7 +1,7 @@
 import * as cdk from 'aws-cdk-lib';
 import { Construct } from 'constructs';
-import { S3Stack } from './stacks/s3-stack';
-import { EC2Stack } from './stacks/ec2-stack';
+// import { S3Stack } from './stacks/s3-stack';
+// import { EC2Stack } from './stacks/ec2-stack';
 import { ApprunnerStack } from './stacks/apprunner-stack';
 import { AppRunnerAlarmStack } from './stacks/alarms/apprunner-alarm-stack';
 import { SecretManagerStack } from './stacks/secret-manager-stack';
