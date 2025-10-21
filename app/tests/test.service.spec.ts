@@ -5,4 +5,9 @@ describe('TestService', () => {
     const service = new TestService();
     expect(service.doLogic()).toBe(true);
   });
+
+  it('should return true from doAnotherLogic', () => {
+    const service = new TestService();
+    expect(service.doAnotherLogic()).toBe(true);
+  });
 });
