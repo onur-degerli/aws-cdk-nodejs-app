@@ -1,0 +1,14 @@
+services:
+  app:
+    container_name: aws-cdk-node-app
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      platforms:
+        - linux/amd64
+    ports:
+      - '3000:3000'
+    env_file:
+      - .env
+    command: node dist/server.js
+    restart: unless-stopped
