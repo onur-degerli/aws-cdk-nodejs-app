@@ -21,6 +21,7 @@
   },
   "lint-staged": {
     "*.{ts,js}": [
+      "eslint --fix",
       "npm test"
     ]
   },
