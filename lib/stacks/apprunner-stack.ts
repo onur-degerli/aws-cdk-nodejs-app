@@ -4,11 +4,18 @@ import * as ecrassets from 'aws-cdk-lib/aws-ecr-assets';
 import * as apprunner from 'aws-cdk-lib/aws-apprunner';
 import * as apigateway from 'aws-cdk-lib/aws-apigateway';
 import * as iam from 'aws-cdk-lib/aws-iam';
+import * as secretsmanager from 'aws-cdk-lib/aws-secretsmanager';
+
+interface AppRunnerStackProps extends cdk.StackProps {
+  dbHost: string;
+  dbName: string;
+  dbSecret: secretsmanager.ISecret;
+}
 
 export class ApprunnerStack extends cdk.Stack {
   public readonly appRunnerServiceName: string = 'app-runner-service';
 
-  constructor(scope: Construct, id: string, props?: cdk.StackProps) {
+  constructor(scope: Construct, id: string, props: AppRunnerStackProps) {
     super(scope, id, props);
 
     const imageAsset = new ecrassets.DockerImageAsset(this, 'AppImage', {
@@ -25,6 +32,11 @@ export class ApprunnerStack extends cdk.Stack {
       ],
     });
 
+    const apprunnerInstanceRole = new iam.Role(this, 'AppRunnerInstanceRole', {
+      assumedBy: new iam.ServicePrincipal('tasks.apprunner.amazonaws.com'),
+    });
+    props.dbSecret.grantRead(apprunnerInstanceRole);
+
     const appRunnerService = new apprunner.CfnService(this, 'AppRunnerService', {
       serviceName: this.appRunnerServiceName,
       sourceConfiguration: {
@@ -36,6 +48,13 @@ export class ApprunnerStack extends cdk.Stack {
           imageRepositoryType: 'ECR',
           imageConfiguration: {
             port: '3000',
+            runtimeEnvironmentSecrets: [
+              { name: 'DB_HOST', value: props.dbHost },
+              { name: 'DB_NAME', value: props.dbName },
+              { name: 'DB_SECRET_ARN', value: props.dbSecret.secretArn },
+              { name: 'DB_PORT', value: '5432' },
+              { name: 'AWS_REGION', value: cdk.Stack.of(this).region },
+            ],
           },
         },
         autoDeploymentsEnabled: true,

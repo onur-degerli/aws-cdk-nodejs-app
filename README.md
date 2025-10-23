@@ -51,7 +51,7 @@ npm run lint:fix
 
 5️⃣ Build and start locally with Docker
 
-```
+```bash
 docker-compose up -d
 ```
 

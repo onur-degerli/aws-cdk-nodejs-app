@@ -4,6 +4,7 @@ import { Construct } from 'constructs';
 // import { EC2Stack } from './stacks/ec2-stack';
 import { ApprunnerStack } from './stacks/apprunner-stack';
 import { AppRunnerAlarmStack } from './stacks/alarms/apprunner-alarm-stack';
+import { RdsStack } from './stacks/rds-stack';
 import { SecretManagerStack } from './stacks/secret-manager-stack';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
@@ -11,11 +12,21 @@ export class App extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
+    const rdsStack = new RdsStack(this, 'RdsStack', {
+      env: {
+        account: process.env.CDK_DEFAULT_ACCOUNT,
+        region: 'eu-central-1',
+      },
+    });
+
     const apprunnerStack = new ApprunnerStack(this, 'AppRunner', {
       env: {
         account: process.env.CDK_DEFAULT_ACCOUNT,
         region: 'eu-central-1',
       },
+      dbHost: rdsStack.dbInstance.dbInstanceEndpointAddress,
+      dbName: 'appdb',
+      dbSecret: rdsStack.dbSecret,
     });
 
     const secretStack = new SecretManagerStack(this, 'SecretManagerStack', {

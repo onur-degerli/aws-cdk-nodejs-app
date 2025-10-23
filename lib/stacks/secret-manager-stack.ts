@@ -14,9 +14,6 @@ export class SecretManagerStack extends cdk.Stack {
       generateSecretString: {
         secretStringTemplate: JSON.stringify({
           slackWebhookUrl: '',
-          dbHost: '',
-          dbUser: '',
-          dbPassword: '',
         }),
         generateStringKey: 'random',
       },
