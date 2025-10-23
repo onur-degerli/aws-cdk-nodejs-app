@@ -70,6 +70,7 @@ export class ApprunnerStack extends cdk.Stack {
       instanceConfiguration: {
         cpu: '1024',
         memory: '2048',
+        instanceRoleArn: apprunnerInstanceRole.roleArn,
       },
     });
 
