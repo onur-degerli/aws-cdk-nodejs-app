@@ -54,13 +54,13 @@ export class ApprunnerStack extends cdk.Stack {
           imageRepositoryType: 'ECR',
           imageConfiguration: {
             port: '3000',
-            runtimeEnvironmentSecrets: [
+            runtimeEnvironmentVariables: [
               { name: 'DB_HOST', value: props.dbHost },
               { name: 'DB_NAME', value: props.dbName },
-              { name: 'DB_SECRET_ARN', value: props.dbSecret.secretArn },
               { name: 'DB_PORT', value: '5432' },
               { name: 'AWS_REGION', value: cdk.Stack.of(this).region },
             ],
+            runtimeEnvironmentSecrets: [{ name: 'DB_SECRET_ARN', value: props.dbSecret.secretArn }],
           },
         },
         autoDeploymentsEnabled: true,
