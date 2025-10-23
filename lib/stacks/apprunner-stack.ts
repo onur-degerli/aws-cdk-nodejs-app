@@ -36,6 +36,12 @@ export class ApprunnerStack extends cdk.Stack {
       assumedBy: new iam.ServicePrincipal('tasks.apprunner.amazonaws.com'),
     });
     props.dbSecret.grantRead(apprunnerInstanceRole);
+    apprunnerInstanceRole.addToPolicy(
+      new iam.PolicyStatement({
+        actions: ['secretsmanager:GetSecretValue', 'ssm:GetParameters', 'ssm:GetParameter'],
+        resources: ['*'],
+      })
+    );
 
     const appRunnerService = new apprunner.CfnService(this, 'AppRunnerService', {
       serviceName: this.appRunnerServiceName,
