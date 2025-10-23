@@ -68,10 +68,10 @@ export class ApprunnerStack extends cdk.Stack {
       healthCheckConfiguration: {
         path: '/',
         protocol: 'HTTP',
-        interval: 10,
-        timeout: 5,
+        interval: 30,
+        timeout: 10,
         healthyThreshold: 1,
-        unhealthyThreshold: 5,
+        unhealthyThreshold: 10,
       },
       instanceConfiguration: {
         cpu: '1024',
