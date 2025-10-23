@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import { getDbClient } from './db';
-import { Client } from 'pg'; // ✅ import the type
+import { Client } from 'pg';
 
 const app = express();
 let dbClient: Client;
