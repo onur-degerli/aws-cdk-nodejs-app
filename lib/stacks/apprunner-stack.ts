@@ -66,9 +66,9 @@ export class ApprunnerStack extends cdk.Stack {
         autoDeploymentsEnabled: true,
       },
       healthCheckConfiguration: {
-        path: '/',
+        path: '/health',
         protocol: 'HTTP',
-        interval: 30,
+        interval: 20,
         timeout: 10,
         healthyThreshold: 1,
         unhealthyThreshold: 10,
