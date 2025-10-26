@@ -5,7 +5,7 @@ const logger = pino({
   timestamp: pino.stdTimeFunctions.isoTime,
   formatters: {
     level(label) {
-      return { level: label.toUpperCase };
+      return { level: label.toUpperCase() };
     },
   },
 });
