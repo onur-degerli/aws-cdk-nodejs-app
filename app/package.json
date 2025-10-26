@@ -6,10 +6,15 @@
     "build": "tsc",
     "dev": "tsx watch server.ts",
     "start": "node dist/server.js",
+    "prisma:generate": "npx prisma generate",
+    "prisma:migrate": "npx prisma migrate dev --name init",
+    "prisma:pull": "npx prisma db pull",
+    "db:deploy": "npx prisma migrate deploy && npx prisma generate",
     "test": "npx jest"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.916.0",
+    "@prisma/client": "^6.18.0",
     "express": "^4.21.2",
     "pg": "^8.16.3",
     "pino": "^10.1.0"
@@ -20,6 +25,7 @@
     "@types/node": "^24.8.1",
     "@types/pg": "^8.15.5",
     "jest": "^30.2.0",
+    "prisma": "^6.18.0",
     "ts-jest": "^29.4.5",
     "ts-node": "^10.9.2",
     "tsx": "^4.20.6",

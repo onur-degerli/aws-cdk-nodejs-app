@@ -31,7 +31,6 @@ services:
       NODE_ENV: development
     volumes:
       - ./app:/usr/src/app
-      - /usr/src/app/node_modules
     depends_on:
       db:
         condition: service_healthy

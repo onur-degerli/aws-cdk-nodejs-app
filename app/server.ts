@@ -1,21 +1,16 @@
 import express, { Request, Response } from 'express';
-import { getDbClient } from './db';
-import { Client } from 'pg';
 import { log } from './common/logger';
+import prisma from './lib/prisma';
 
 const app = express();
-let dbClient: Client;
 
 app.get('/', async (req: Request, res: Response) => {
   try {
-    if (!dbClient) {
-      dbClient = await getDbClient();
-    }
+    const users = await prisma.user.findMany();
 
-    const result = await dbClient.query('SELECT NOW() as current_time');
     res.json({
       message: 'Hello from TypeScript App Runner!',
-      time: result.rows[0].current_time,
+      users: users,
     });
   } catch (err) {
     log.error(err);
