@@ -108,17 +108,18 @@ Triggered manually (workflow_dispatch) or on pushes to main.
 
 ## 🧾 Useful Scripts
 
-| Script                 | Description                      |
-| ---------------------- | -------------------------------- |
-| `npm run build`        | Compile TypeScript               |
-| `npm start`            | Start Node.js app                |
-| `npm test`             | Run Jest tests                   |
-| `npm run lint`         | Lint TypeScript files            |
-| `npm run lint:fix`     | Auto-fix lint issues             |
-| `docker-compose up -d` | Start app via Docker             |
-| `npx cdk synth`        | Generate CloudFormation template |
-| `npx cdk diff`         | Compare deployed vs local stack  |
-| `npx cdk deploy`       | Deploy CDK stack to AWS          |
+| Script                      | Description                             |
+| --------------------------- | --------------------------------------- |
+| `npm run build`             | Compile TypeScript                      |
+| `npm start`                 | Start Node.js app                       |
+| `npm test`                  | Run Jest tests                          |
+| `npm run lint`              | Lint TypeScript files                   |
+| `npm run lint:fix`          | Auto-fix lint issues                    |
+| `docker-compose up -d`      | Start app via Docker                    |
+| `docker-compose up --build` | Start app via Docker with a fresh build |
+| `npx cdk synth`             | Generate CloudFormation template        |
+| `npx cdk diff`              | Compare deployed vs local stack         |
+| `npx cdk deploy`            | Deploy CDK stack to AWS                 |
 
 ## 🧩 Key Highlights
 
