@@ -39,7 +39,6 @@ export class ApprunnerStack extends cdk.Stack {
     });
 
     const vpcConnector = new apprunner.CfnVpcConnector(this, 'AppRunnerVpcConnector', {
-      vpcConnectorName: 'app-runner-vpc-connector',
       subnets: props.vpc.privateSubnets.map((s) => s.subnetId),
       securityGroups: [appRunnerConnectorSg.securityGroupId],
     });
