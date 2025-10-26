@@ -1,10 +1,10 @@
 #!/usr/bin/env node
 import * as cdk from 'aws-cdk-lib';
-import { NetworkStack } from '../lib/stacks/network-stack';
-import { RdsStack } from '../lib/stacks/rds-stack';
-import { ApprunnerStack } from '../lib/stacks/apprunner-stack';
-import { SecretManagerStack } from '../lib/stacks/secret-manager-stack';
-import { AppRunnerAlarmStack } from '../lib/stacks/alarms/apprunner-alarm-stack';
+import { NetworkStack } from '../lib/stacks/network.stack';
+import { RdsStack } from '../lib/stacks/rds.stack';
+import { ApprunnerStack } from '../lib/stacks/apprunner.stack';
+import { SecretManagerStack } from '../lib/stacks/secret-manager.stack';
+import { AppRunnerAlarmStack } from '../lib/stacks/alarms/apprunner-alarm.stack';
 
 const app = new cdk.App();
 
