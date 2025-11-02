@@ -6,11 +6,7 @@
     "build": "tsc",
     "dev": "tsx watch server.ts",
     "start": "node dist/server.js",
-    "test": "npx jest",
-    "prisma:migrate": "npx prisma migrate dev --name init",
-    "prisma:studio": "npx prisma studio",
-    "prisma:generate": "npx prisma generate",
-    "prisma:push": "npx prisma db push"
+    "test": "npx jest"
   },
   "dependencies": {
     "@aws-sdk/client-secrets-manager": "^3.916.0",
