@@ -6,11 +6,7 @@
     "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
-    "skipLibCheck": true,
-    "paths": {
-      "@app/common/*": ["./common/src/*"],
-      "@app/orm/*": ["./db/orm/*"]
-    }
+    "skipLibCheck": true
   },
   "include": ["server.ts"]
 }

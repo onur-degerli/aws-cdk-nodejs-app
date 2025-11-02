@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
-import { getDbClient, DbClient } from './common/db';
-import { log } from './common/logger';
+import { getDbClient, DbClient } from '@app/common/db';
+import { log } from '@app/common/logger';
 
 const app = express();
 let dbClient: DbClient;

@@ -1,5 +1,5 @@
 import { SecretsManagerClient, GetSecretValueCommand } from '@aws-sdk/client-secrets-manager';
-import { PrismaClient } from '../db/orm/generated/prisma/client';
+import { PrismaClient } from '@app/orm/generated/prisma/client';
 import dns from 'dns';
 import { log } from './logger';
 
@@ -35,7 +35,6 @@ export async function getDbClient(): Promise<DbClient> {
     log.info('🔧 Connecting to local Postgres...');
     const client = new PrismaClient();
     globalClient = client;
-
     return client;
   }
 
@@ -50,7 +49,6 @@ export async function getDbClient(): Promise<DbClient> {
     log.info('🔐 Using secret ARN:', JSON.stringify(secretArn));
 
     const secret = JSON.parse(secretData.SecretString || '{}');
-
     const databaseUrl = `postgresql://${secret.username}:${secret.password}@${dbHost}:${dbPort}/${dbName}?schema=public`;
     process.env.DATABASE_URL = databaseUrl;
 
@@ -68,7 +66,6 @@ export async function getDbClient(): Promise<DbClient> {
       log.error(err, '❌ Failed to connect to database');
       process.exit(1);
     }
-
     return globalClient;
   }
 
