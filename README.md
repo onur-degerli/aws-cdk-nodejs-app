@@ -55,6 +55,12 @@ npm run lint:fix
 docker-compose up -d
 ```
 
+or just run
+
+```bash
+./dev.sh
+```
+
 ## 🧪 Testing & Code Quality
 
 All tests are written in Jest and automatically executed before every commit and before deployment.
@@ -110,6 +116,7 @@ Triggered manually (workflow_dispatch) or on pushes to main.
 
 | Script                      | Description                             |
 | --------------------------- | --------------------------------------- |
+| `./dev.sh`                  | Start app + DB + Prisma migrations      |
 | `npm run build`             | Compile TypeScript                      |
 | `npm start`                 | Start Node.js app                       |
 | `npm test`                  | Run Jest tests                          |
