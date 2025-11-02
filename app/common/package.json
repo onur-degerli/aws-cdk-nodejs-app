@@ -1,0 +1,16 @@
+{
+  "name": "@app/common",
+  "private": true,
+  "type": "module",
+  "exports": {
+    "./*": "./src/*.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@app/orm": "*",
+    "@prisma/client": "^6.18.0",
+    "pino": "^10.1.0"
+  }
+}

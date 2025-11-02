@@ -1,5 +1,6 @@
 {
-  "name": "prisma",
+  "name": "@app/orm",
+  "type": "module",
   "scripts": {
     "prisma:migrate": "npx prisma migrate dev --name init",
     "prisma:studio": "npx prisma studio",
