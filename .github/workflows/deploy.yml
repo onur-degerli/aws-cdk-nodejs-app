@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   deploy:
-    name: CDK Deploy
+    name: Deploy Main
     runs-on: ubuntu-latest
 
     steps:
