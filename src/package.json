@@ -1,0 +1,9 @@
+{
+  "name": "app",
+  "private": true,
+  "workspaces": [
+    "apps/*",
+    "common",
+    "db/orm"
+  ]
+}

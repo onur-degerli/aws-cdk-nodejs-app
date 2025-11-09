@@ -10,18 +10,18 @@ echo "🏗️ Building images..."
 docker compose build
 
 echo "🐘 Starting PostgreSQL..."
-docker compose up -d db
+docker compose up -d app-db
 
 echo "⏳ Waiting for database to become healthy..."
-until [ "$(docker inspect -f '{{.State.Health.Status}}' local-postgres)" == "healthy" ]; do
+until [ "$(docker inspect -f '{{.State.Health.Status}}' app-db)" == "healthy" ]; do
   sleep 2
 done
 
 echo "🧱 Running Prisma migrations..."
-docker compose run --rm app npx --no-install prisma migrate deploy --schema ./db/orm/prisma/schema.prisma
+docker compose run --rm main-app npx --no-install prisma migrate deploy --schema ./db/orm/prisma/schema.prisma
 
 echo "⚙️ Generating Prisma client..."
-docker compose run --rm app npx --no-install prisma generate --schema ./db/orm/prisma/schema.prisma
+docker compose run --rm main-app npx --no-install prisma generate --schema ./db/orm/prisma/schema.prisma
 
 echo "🌍 Starting full stack (app + db)..."
 docker compose up

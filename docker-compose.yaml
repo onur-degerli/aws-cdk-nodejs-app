@@ -1,7 +1,7 @@
 services:
-  db:
+  app-db:
     image: postgres:15-alpine
-    container_name: local-postgres
+    container_name: app-db
     restart: unless-stopped
     environment:
       POSTGRES_USER: postgres
@@ -16,26 +16,26 @@ services:
       interval: 10s
       timeout: 5s
       retries: 5
-  app:
-    container_name: aws-cdk-node-app
+  main-app:
+    container_name: main-app
     build:
-      context: ./app
-      dockerfile: Dockerfile.dev
-      platforms:
-        - linux/amd64
+      context: ./src
+      dockerfile: apps/main-app/Dockerfile.dev
     ports:
       - '3000:3000'
     env_file:
-      - ./.env
+      - ./src/apps/main-app/.env
     environment:
       NODE_ENV: development
     volumes:
-      - ./app:/usr/src/app
-      - /usr/src/app/node_modules
+      - ./src/apps/main-app:/usr/src/apps/main-app
+      - ./src/common:/usr/src/common
+      - ./src/db:/usr/src/db
+      - /usr/src/node_modules
     depends_on:
-      db:
+      app-db:
         condition: service_healthy
-    command: npm run dev
+    command: npm run dev --workspace=@app/main-app
     restart: unless-stopped
 volumes:
   postgres_data:
