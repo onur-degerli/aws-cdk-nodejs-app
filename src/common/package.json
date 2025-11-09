@@ -1,7 +1,5 @@
 {
   "name": "@app/common",
-  "private": true,
-  "type": "module",
   "exports": {
     "./*": "./src/*.ts"
   },
