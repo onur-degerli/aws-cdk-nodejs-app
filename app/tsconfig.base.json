@@ -2,15 +2,13 @@
   "compilerOptions": {
     "target": "ES2020",
     "module": "CommonJS",
-    "outDir": "dist",
-    "rootDir": "./",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
+    "baseUrl": ".",
     "paths": {
-      "@app/common/*": ["./common/src/*"],
-      "@app/orm/*": ["./db/orm/*"]
+      "@app/common/*": ["common/src/*"],
+      "@app/orm/*": ["db/orm/*"]
     }
-  },
-  "include": ["server.ts"]
+  }
 }
