@@ -137,6 +137,15 @@ Triggered manually (workflow_dispatch) or on pushes to main.
 ✅ Docker-based local environment for consistent dev setups
 ✅ Scalable, production-ready AWS architecture
 
+## Features
+
+### Movie Recommendation App
+
+```bash
+cd src/apps/movie-recommendation-app
+npm run movie-recommendation
+```
+
 ## 🏁 License
 
 This project is licensed under the MIT License.
