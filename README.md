@@ -143,6 +143,18 @@ Triggered manually (workflow_dispatch) or on pushes to main.
 
 ```bash
 cd src/apps/movie-recommendation-app
+```
+
+Create a `data` folder and download the movie dataset.
+
+```bash
+cd data
+curl -X GET "https://huggingface.co/api/datasets/AiresPucrs/tmdb-5000-movies/parquet/default/train"
+```
+
+Run the command below to get the AI response.
+
+```bash
 npm run movie-recommendation
 ```
 
