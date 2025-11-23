@@ -1,7 +1,8 @@
 import 'dotenv/config';
 import { ChatOpenAI } from '@langchain/openai';
 import { MemoryVectorStore } from '@langchain/classic/vectorstores/memory';
-import { RetrievalQAChain } from '@langchain/classic/chains';
+import { ConversationalRetrievalQAChain } from '@langchain/classic/chains';
+import { BufferMemory } from '@langchain/classic/memory';
 
 export async function createChatbot(store: MemoryVectorStore) {
   const llm = new ChatOpenAI({
@@ -10,10 +11,18 @@ export async function createChatbot(store: MemoryVectorStore) {
     model: 'gpt-5-mini',
   });
 
-  const chain = RetrievalQAChain.fromLLM(llm, store.asRetriever());
+  const retriever = store.asRetriever();
+  const memory = new BufferMemory({
+    memoryKey: 'chat_history',
+    returnMessages: true,
+  });
+
+  const chain = ConversationalRetrievalQAChain.fromLLM(llm, retriever, {
+    memory,
+  });
 
   return async (query: string) => {
-    const res = await chain.invoke({ query });
+    const res = await chain.invoke({ question: query });
     return res.text;
   };
 }
