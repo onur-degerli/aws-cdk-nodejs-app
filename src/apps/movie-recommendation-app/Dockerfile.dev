@@ -6,9 +6,8 @@ RUN corepack enable && corepack prepare pnpm@10.18.1 --activate
 COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json ./
 COPY common/package.json common/
 COPY db/orm/package.json db/orm/
-COPY apps/main-app/package.json apps/main-app/
 COPY apps/movie-recommendation-app/package.json apps/movie-recommendation-app/
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --filter @app/movie-recommendation-app... --frozen-lockfile
 
 COPY . .
 
