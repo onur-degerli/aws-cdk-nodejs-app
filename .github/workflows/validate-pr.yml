@@ -21,19 +21,20 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install dependencies
-        run: npm ci
-
-      - name: Cache npm
-        uses: actions/cache@v4
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
-          path: ~/.npm
-          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
-          restore-keys: |
-            ${{ runner.os }}-node-
+          version: 10.18.1
+
+      - name: Install infra dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install app workspace dependencies
+        working-directory: src
+        run: pnpm install --frozen-lockfile
 
       - name: Run tests
-        run: npm test
+        run: pnpm test
 
       - name: Lint code
-        run: npm run lint
+        run: pnpm run lint

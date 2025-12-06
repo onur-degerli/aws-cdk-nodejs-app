@@ -1,13 +1,14 @@
 {
   "name": "aws-cdk-nodejs",
   "version": "0.1.0",
+  "packageManager": "pnpm@10.18.1",
   "bin": {
     "aws-cdk-nodejs": "bin/aws-cdk-nodejs.js"
   },
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "test": "npx jest --passWithNoTests",
+    "test": "jest --passWithNoTests",
     "format": "prettier --write .",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
@@ -23,7 +24,7 @@
   "lint-staged": {
     "*.{ts,js}": [
       "eslint --fix",
-      "npm test"
+      "pnpm test"
     ]
   },
   "devDependencies": {
