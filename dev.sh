@@ -18,10 +18,10 @@ until [ "$(docker inspect -f '{{.State.Health.Status}}' app-db)" == "healthy" ];
 done
 
 echo "🧱 Running Prisma migrations..."
-docker compose run --rm main-app npx --no-install prisma migrate deploy --schema ./db/orm/prisma/schema.prisma
+docker compose run --rm main-app pnpm --filter @app/orm exec prisma migrate deploy --schema prisma/schema.prisma
 
 echo "⚙️ Generating Prisma client..."
-docker compose run --rm main-app npx --no-install prisma generate --schema ./db/orm/prisma/schema.prisma
+docker compose run --rm main-app pnpm --filter @app/orm exec prisma generate --schema prisma/schema.prisma
 
 echo "🌍 Starting full stack (app + db)..."
 docker compose up

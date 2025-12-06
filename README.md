@@ -28,25 +28,25 @@ It integrates full CI/CD automation, linting, testing, and Docker support — a 
 ### 1️⃣ Install dependencies
 
 ```bash
-npm ci
+pnpm install
 ```
 
 2️⃣ Run tests
 
 ```bash
-npm test
+pnpm test
 ```
 
 3️⃣ Lint code
 
 ```bash
-npm run lint
+pnpm run lint
 ```
 
 4️⃣ Fix lint issues automatically
 
 ```bash
-npm run lint:fix
+pnpm run lint:fix
 ```
 
 5️⃣ Build and start locally with Docker
@@ -67,7 +67,7 @@ All tests are written in Jest and automatically executed before every commit and
 
 Example workflow:
 
-1 - Run `npm test` locally
+1 - Run `pnpm test` locally
 
 2 - Commit → Husky triggers ESLint + Jest checks
 
@@ -82,10 +82,10 @@ Infrastructure is managed using AWS CDK (written in TypeScript).
 Common commands:
 
 ```bash
-npx cdk bootstrap
-npm run synth
-npm run diff
-npm run deploy
+pnpm exec cdk bootstrap
+pnpm run infra:synth
+pnpm run infra:diff
+pnpm run infra:deploy
 ```
 
 The CDK stack provisions:
@@ -104,7 +104,7 @@ Automated pipeline (.github/workflows/deploy.yaml) includes:
 
 | Step                    | Description                                 |
 | ----------------------- | ------------------------------------------- |
-| 🧩 **Install & Cache**  | Uses `npm ci` for clean dependency installs |
+| 🧩 **Install & Cache**  | Uses `pnpm install` for clean dependency installs |
 | 🧪 **Run Tests**        | Executes Jest test suite                    |
 | 🧹 **Run ESLint**       | Enforces coding standards                   |
 | ☁️ **CDK Synth & Diff** | Validates infrastructure templates          |
@@ -117,16 +117,16 @@ Triggered manually (workflow_dispatch) or on pushes to main.
 | Script                      | Description                             |
 | --------------------------- | --------------------------------------- |
 | `./dev.sh`                  | Start app + DB + Prisma migrations      |
-| `npm run build`             | Compile TypeScript                      |
-| `npm start`                 | Start Node.js app                       |
-| `npm test`                  | Run Jest tests                          |
-| `npm run lint`              | Lint TypeScript files                   |
-| `npm run lint:fix`          | Auto-fix lint issues                    |
+| `pnpm run build`             | Compile TypeScript                      |
+| `pnpm start`                 | Start Node.js app                       |
+| `pnpm test`                  | Run Jest tests                          |
+| `pnpm run lint`              | Lint TypeScript files                   |
+| `pnpm run lint:fix`          | Auto-fix lint issues                    |
 | `docker-compose up -d`      | Start app via Docker                    |
 | `docker-compose up --build` | Start app via Docker with a fresh build |
-| `npx cdk synth`             | Generate CloudFormation template        |
-| `npx cdk diff`              | Compare deployed vs local stack         |
-| `npx cdk deploy`            | Deploy CDK stack to AWS                 |
+| `pnpm exec cdk synth`             | Generate CloudFormation template        |
+| `pnpm exec cdk diff`              | Compare deployed vs local stack         |
+| `pnpm exec cdk deploy`            | Deploy CDK stack to AWS                 |
 
 ## 🧩 Key Highlights
 
@@ -155,7 +155,7 @@ curl -X GET "https://huggingface.co/api/datasets/AiresPucrs/tmdb-5000-movies/par
 Run the command below to get the AI response.
 
 ```bash
-npm run movie-recommendation
+pnpm run movie-recommendation
 ```
 
 ## 🏁 License

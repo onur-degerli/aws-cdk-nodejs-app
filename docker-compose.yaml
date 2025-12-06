@@ -35,7 +35,7 @@ services:
     depends_on:
       app-db:
         condition: service_healthy
-    command: npm run dev --workspace=@app/main-app
+    command: pnpm --filter @app/main-app dev
     restart: unless-stopped
   movie-recommendation-app:
     container_name: movie-recommendation-app
@@ -55,7 +55,7 @@ services:
     depends_on:
       app-db:
         condition: service_healthy
-    command: npm run dev --workspace=@app/movie-recommendation-app
+    command: pnpm --filter @app/movie-recommendation-app dev
     restart: unless-stopped
 volumes:
   postgres_data:
