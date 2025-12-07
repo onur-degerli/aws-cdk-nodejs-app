@@ -7,10 +7,13 @@ COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json ./
 COPY common/package.json common/
 COPY db/orm/package.json db/orm/
 COPY apps/main-app/package.json apps/main-app/
-RUN pnpm install --filter @app/main-app... --frozen-lockfile
+
+RUN pnpm install --recursive
 
 COPY . .
-RUN DATABASE_URL="postgresql://user:pass@localhost:5432/appdb" pnpm --filter @app/orm exec prisma generate
+
+RUN pnpm --filter @app/orm prisma:generate
+
 RUN pnpm --filter @app/main-app build
 
 FROM node:22-alpine
@@ -19,9 +22,9 @@ WORKDIR /usr/src/app
 RUN corepack enable && corepack prepare pnpm@10.18.1 --activate
 
 COPY --from=build /usr/src/apps/main-app/package.json ./package.json
-COPY --from=build /usr/src/node_modules ./node_modules
 COPY --from=build /usr/src/apps/main-app/dist ./dist
-COPY --from=build /usr/src/apps/main-app/generated ./generated
+
+COPY --from=build /usr/src/node_modules ./node_modules
 
 EXPOSE 3000
 CMD ["node", "dist/index.js"]
