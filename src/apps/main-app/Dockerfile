@@ -20,6 +20,7 @@ RUN corepack enable && corepack prepare pnpm@10.18.1 --activate
 COPY --from=build /usr/src/apps/main-app/package.json ./package.json
 COPY --from=build /usr/src/node_modules ./node_modules
 COPY --from=build /usr/src/apps/main-app/dist ./dist
+COPY --from=build /usr/src/apps/main-app/generated ./generated
 
 EXPOSE 3000
 CMD ["node", "dist/index.js"]
