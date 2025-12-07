@@ -19,8 +19,15 @@ export default defineConfig([
     language: 'markdown/gfm',
     extends: ['markdown/recommended'],
   },
+  {
+    files: ['**/*.cjs'],
+    rules: {
+      '@typescript-eslint/no-require-imports': 'off',
+      '@typescript-eslint/no-var-requires': 'off',
+    },
+  },
   { files: ['**/*.css'], plugins: { css }, language: 'css/css', extends: ['css/recommended'] },
   {
-    ignores: ['node_modules', 'cdk.out', 'dist', '**/*.js'],
+    ignores: ['node_modules', 'cdk.out', 'dist', 'coverage', '**/coverage/**', '**/*.js'],
   },
 ]);
