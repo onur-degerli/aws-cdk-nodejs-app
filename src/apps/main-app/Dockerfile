@@ -10,7 +10,7 @@ COPY apps/main-app/package.json apps/main-app/
 RUN pnpm install --filter @app/main-app... --frozen-lockfile
 
 COPY . .
-RUN pnpm --filter @app/orm exec prisma generate
+RUN DATABASE_URL="postgresql://user:pass@localhost:5432/appdb" pnpm --filter @app/orm exec prisma generate
 RUN pnpm --filter @app/main-app build
 
 FROM node:22-alpine
