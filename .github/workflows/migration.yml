@@ -1,4 +1,4 @@
-name: Run Prisma Migrations (Manual)
+name: Run Migrations
 
 on:
   workflow_dispatch:
@@ -8,7 +8,7 @@ permissions:
 
 jobs:
   migrate:
-    name: Apply Prisma Migrations to Prod DB
+    name: Apply Migrations to Prod DB
     runs-on: ubuntu-latest
 
     steps:
@@ -25,16 +25,13 @@ jobs:
         with:
           version: 10.18.1
 
-      # Install root workspace deps
       - name: Install root dependencies
         run: pnpm install --frozen-lockfile
 
-      # Install ORM workspace dependencies
       - name: Install ORM dependencies
         working-directory: src
         run: pnpm install --frozen-lockfile
 
-      # AWS credentials for Secrets Manager + RDS access
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -42,17 +39,19 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: ${{ secrets.AWS_REGION }}
 
-      # Load DATABASE_URL from Secrets Manager
       - name: Load DATABASE_URL from AWS Secrets Manager
         id: get-db-url
         run: |
-          URL=$(aws secretsmanager get-secret-value \
-            --secret-id ${{ secrets.DB_SECRET_ID }} \
-            --query SecretString \
-            --output text)
+          RAW=$(aws secretsmanager get-secret-value \
+          --secret-id ${{ secrets.DB_SECRET_ID }} \
+          --query SecretString \
+          --output text)
+
+          # Extract fields + build URL
+          URL=$(echo "$RAW" | jq -r '"postgresql://\(.username):\(.password)@\(.host):\(.port)/\(.dbname)"')
+
           echo "DATABASE_URL=$URL" >> $GITHUB_ENV
 
-      # Run Prisma migration
       - name: Run Prisma Migrate Deploy
         working-directory: src/db/orm
         env:
