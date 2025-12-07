@@ -16,9 +16,6 @@ importers:
       '@aws-sdk/client-secrets-manager':
         specifier: ^3.916.0
         version: 3.946.0
-      '@prisma/client':
-        specifier: ^6.18.0
-        version: 6.19.0(prisma@6.19.0(typescript@5.9.3))(typescript@5.9.3)
       express:
         specifier: ^4.21.2
         version: 4.22.1
