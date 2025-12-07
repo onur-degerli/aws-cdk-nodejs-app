@@ -39,12 +39,15 @@ export class ApprunnerStack extends cdk.Stack {
     });
 
     const vpcConnector = new apprunner.CfnVpcConnector(this, 'AppRunnerVpcConnector', {
-      subnets: props.vpc.privateSubnets.map((s) => s.subnetId),
+      subnets: props.vpc.selectSubnets({
+        subnetType: ec2.SubnetType.PRIVATE_WITH_EGRESS,
+      }).subnetIds,
       securityGroups: [appRunnerConnectorSg.securityGroupId],
     });
 
     const imageAsset = new ecrassets.DockerImageAsset(this, 'AppImage', {
-      directory: './app',
+      directory: './src',
+      file: 'apps/main-app/Dockerfile',
       platform: ecrassets.Platform.LINUX_AMD64,
     });
 
@@ -59,11 +62,25 @@ export class ApprunnerStack extends cdk.Stack {
 
     const apprunnerInstanceRole = new iam.Role(this, 'AppRunnerInstanceRole', {
       assumedBy: new iam.ServicePrincipal('tasks.apprunner.amazonaws.com'),
+      managedPolicies: [
+        iam.ManagedPolicy.fromAwsManagedPolicyName(
+          'service-role/AWSAppRunnerServicePolicyForECRAccess'
+        ),
+      ],
     });
+
     props.dbSecret.grantRead(apprunnerInstanceRole);
+
     apprunnerInstanceRole.addToPolicy(
       new iam.PolicyStatement({
-        actions: ['secretsmanager:GetSecretValue', 'ssm:GetParameters', 'ssm:GetParameter'],
+        actions: ['secretsmanager:GetSecretValue'],
+        resources: [props.dbSecret.secretArn],
+      })
+    );
+
+    apprunnerInstanceRole.addToPolicy(
+      new iam.PolicyStatement({
+        actions: ['ssm:GetParameters', 'ssm:GetParameter'],
         resources: ['*'],
       })
     );

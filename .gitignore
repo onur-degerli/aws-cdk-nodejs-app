@@ -3,6 +3,7 @@
 node_modules
 .DS_Store
 dist
+src/apps/main-app/generated
 .env
 
 # CDK asset staging directory
