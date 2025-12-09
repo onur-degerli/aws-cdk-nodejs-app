@@ -9,3 +9,5 @@ src/apps/main-app/generated
 # CDK asset staging directory
 .cdk.staging
 cdk.out
+
+localstack
