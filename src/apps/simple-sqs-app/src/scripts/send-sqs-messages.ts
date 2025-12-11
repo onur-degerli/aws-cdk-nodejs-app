@@ -1,5 +1,5 @@
-import { createQueue } from '../src/create-sqs-queue';
-import { sendMessage } from '../src/send-message';
+import { createQueue } from '../create-sqs-queue';
+import { sendMessage } from '../send-message';
 
 async function main() {
   const queueName = 'test-queue';

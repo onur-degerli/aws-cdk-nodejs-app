@@ -1,7 +1,10 @@
 import { ReceiveMessageCommand } from '@aws-sdk/client-sqs';
 import { sqs } from './sqs-client';
+import { SqsMessageResponseInterface } from './interfaces/index';
 
-export async function consumeMessage(queueUrl: string) {
+export async function consumeMessage(
+  queueUrl: string
+): Promise<SqsMessageResponseInterface | undefined> {
   const response = await sqs.send(
     new ReceiveMessageCommand({
       QueueUrl: queueUrl,
@@ -9,5 +12,7 @@ export async function consumeMessage(queueUrl: string) {
     })
   );
 
-  console.log('Consumed: ', response.Messages);
+  return response.Messages
+    ? (response.Messages as unknown as SqsMessageResponseInterface)
+    : undefined;
 }
