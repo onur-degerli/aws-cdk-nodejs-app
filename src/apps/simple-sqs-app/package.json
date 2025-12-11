@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "send-sqs-message": "tsx ./scripts/send-sqs-message.ts",
-    "consume-sqs-message": "tsx ./scripts/consume-sqs-message.ts",
+    "send-sqs-messages": "tsx ./src/scripts/send-sqs-messages.ts",
+    "consume-sqs-messages": "tsx ./src/scripts/consume-sqs-messages.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
