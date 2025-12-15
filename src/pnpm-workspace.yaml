@@ -2,3 +2,4 @@ packages:
   - apps/*
   - common
   - db/orm
+  - messaging

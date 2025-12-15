@@ -1,9 +1,6 @@
 {
   "name": "@app/orm",
   "type": "module",
-  "dependencies": {
-    "@prisma/client": "^6.18.0"
-  },
   "scripts": {
     "prisma:migrate": "prisma migrate dev --name init",
     "prisma:pull": "prisma db pull",
@@ -11,6 +8,9 @@
     "prisma:push": "prisma db push",
     "prisma:reset": "prisma migrate reset",
     "prisma:studio": "prisma studio"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.18.0"
   },
   "devDependencies": {
     "dotenv": "^16.6.1",
