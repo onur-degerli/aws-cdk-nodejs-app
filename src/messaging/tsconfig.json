@@ -1,9 +1,9 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../tsconfig.base.json",
   "compilerOptions": {
     "outDir": "dist",
     "rootDir": "."
   },
-  "include": ["index.ts", "movie-recommendation.ts", "src/**/*.ts"],
+  "include": ["index.ts", "services/**/*.ts"],
   "exclude": ["dist", "tests", "coverage"]
 }
