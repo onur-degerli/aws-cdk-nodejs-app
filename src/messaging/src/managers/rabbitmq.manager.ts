@@ -6,14 +6,16 @@ export class RabbitMqManager implements QueueManagerInterface {
 
   constructor(private channel: Channel) {}
 
-  async getOrCreateQueue(queueName: string): Promise<string | null> {
-    if (this.cache.has(queueName)) {
-      return this.cache.get(queueName)!;
+  async getOrCreateQueue(queueName: string): Promise<string> {
+    if (!this.cache.has(queueName)) {
+      await this.channel.assertQueue(queueName, { durable: true });
+      this.cache.set(queueName, queueName);
     }
 
-    await this.channel.assertQueue(queueName, { durable: true });
-
-    this.cache.set(queueName, queueName);
     return queueName;
+  }
+
+  getChannel(): Channel {
+    return this.channel;
   }
 }
