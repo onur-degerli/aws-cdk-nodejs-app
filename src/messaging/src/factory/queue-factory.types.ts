@@ -1,3 +1,5 @@
+import { Channel } from 'amqplib';
+
 export type QueueProvider = 'sqs' | 'rabbitmq' | 'local';
 
 export interface BaseQueueOptions {
@@ -11,7 +13,7 @@ export interface SqsQueueOptions extends BaseQueueOptions {
 
 export interface RabbitMqQueueOptions extends BaseQueueOptions {
   provider: 'rabbitmq';
-  // channel: any;
+  channel: Channel;
 }
 
 export interface LocalQueueOptions extends BaseQueueOptions {
