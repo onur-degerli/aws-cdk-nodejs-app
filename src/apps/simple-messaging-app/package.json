@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "send-consume-messages": "tsx ./index.ts",
+    "dev": "tsx watch index.ts",
+    "sqs": "tsx ./src/sqs.ts",
+    "rabbitmq": "tsx ./src/rabbitmq.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -13,14 +15,16 @@
   "packageManager": "pnpm@10.18.1",
   "dependencies": {
     "@app/messaging": "workspace:*",
-    "@aws-sdk/client-sqs": "^3.947.0"
+    "@aws-sdk/client-sqs": "^3.947.0",
+    "amqplib": "^0.10.9"
   },
   "devDependencies": {
+    "@types/amqplib": "^0.10.8",
     "@types/jest": "^30.0.0",
     "@types/node": "^24.8.1",
     "dotenv": "^16.6.1",
+    "jest": "^30.2.0",
     "tsx": "^4.20.6",
-    "typescript": "^5.9.3",
-    "jest": "^30.2.0"
+    "typescript": "^5.9.3"
   }
 }
