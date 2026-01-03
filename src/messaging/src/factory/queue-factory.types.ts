@@ -6,12 +6,11 @@ export interface BaseQueueOptions {
   queueName: string;
 }
 
-export interface SqsQueueOptions extends BaseQueueOptions {
+interface SqsQueueOptions extends BaseQueueOptions {
   provider: 'sqs';
-  localEndpoint?: string;
 }
 
-export interface RabbitMqQueueOptions extends BaseQueueOptions {
+interface RabbitMqQueueOptions extends BaseQueueOptions {
   provider: 'rabbitmq';
   channel: Channel;
 }
