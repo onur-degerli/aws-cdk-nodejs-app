@@ -8,21 +8,14 @@ import { MessageQueueInterface } from '../interfaces/message-queue.interface';
 import { QueueManagerInterface } from '../interfaces/queue-manager.interface';
 
 export class SqsAdapter implements MessageQueueInterface {
-  private client: SQSClient;
+  private connection: SQSClient;
 
   constructor(
     private queueManager: QueueManagerInterface,
     private queueName: string,
-    opts: { localEndpoint?: string }
+    connection: SQSClient
   ) {
-    this.client = new SQSClient({
-      region: 'us-east-1',
-      endpoint: opts.localEndpoint,
-      credentials: {
-        accessKeyId: 'test',
-        secretAccessKey: 'test',
-      },
-    });
+    this.connection = connection;
   }
 
   async sendMessage<T>(message: T): Promise<void> {
@@ -31,7 +24,7 @@ export class SqsAdapter implements MessageQueueInterface {
       return;
     }
 
-    await this.client.send(
+    await this.connection.send(
       new SendMessageCommand({
         QueueUrl: queueUrl,
         MessageBody: JSON.stringify(message),
@@ -45,7 +38,7 @@ export class SqsAdapter implements MessageQueueInterface {
       return;
     }
 
-    const response = await this.client.send(
+    const response = await this.connection.send(
       new ReceiveMessageCommand({
         QueueUrl: queueUrl,
         MaxNumberOfMessages: 10,
@@ -62,7 +55,7 @@ export class SqsAdapter implements MessageQueueInterface {
 
       await handler(body);
 
-      await this.client.send(
+      await this.connection.send(
         new DeleteMessageCommand({
           QueueUrl: queueUrl,
           ReceiptHandle: raw.ReceiptHandle,

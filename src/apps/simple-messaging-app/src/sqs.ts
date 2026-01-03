@@ -1,11 +1,9 @@
 import { QueueFactory } from '@app/messaging/factory/queue.factory';
-import 'dotenv/config';
 
 async function main() {
   const queue = QueueFactory.createQueue({
     provider: 'sqs',
     queueName: 'test',
-    localEndpoint: process.env.SQS_ENDPOINT,
   });
 
   await queue.sendMessage({ id: '123', name: 'Test1' });

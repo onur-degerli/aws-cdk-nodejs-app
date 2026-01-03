@@ -2,18 +2,11 @@ import { CreateQueueCommand, GetQueueUrlCommand, SQSClient } from '@aws-sdk/clie
 import { QueueManagerInterface } from '../interfaces/queue-manager.interface';
 
 export class SqsQueueManager implements QueueManagerInterface {
-  private client: SQSClient;
+  private connection: SQSClient;
   private cache = new Map<string, string>();
 
-  constructor(opts: { localEndpoint?: string }) {
-    this.client = new SQSClient({
-      region: 'us-east-1',
-      endpoint: opts.localEndpoint,
-      credentials: {
-        accessKeyId: 'test',
-        secretAccessKey: 'test',
-      },
-    });
+  constructor(connection: SQSClient) {
+    this.connection = connection;
   }
 
   async getOrCreateQueue(queueName: string): Promise<string | null> {
@@ -22,7 +15,7 @@ export class SqsQueueManager implements QueueManagerInterface {
     }
 
     try {
-      const existingQueue = await this.client.send(
+      const existingQueue = await this.connection.send(
         new GetQueueUrlCommand({ QueueName: queueName })
       );
 
@@ -36,7 +29,7 @@ export class SqsQueueManager implements QueueManagerInterface {
       console.log(e);
     }
 
-    const createdQueue = await this.client.send(
+    const createdQueue = await this.connection.send(
       new CreateQueueCommand({
         QueueName: queueName,
       })
