@@ -125,7 +125,13 @@ importers:
       '@aws-sdk/client-sqs':
         specifier: ^3.947.0
         version: 3.947.0
+      amqplib:
+        specifier: ^0.10.9
+        version: 0.10.9
     devDependencies:
+      '@types/amqplib':
+        specifier: ^0.10.8
+        version: 0.10.8
       '@types/jest':
         specifier: ^30.0.0
         version: 30.0.0

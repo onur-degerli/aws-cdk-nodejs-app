@@ -82,5 +82,23 @@ services:
         condition: service_healthy
     command: pnpm --filter @app/movie-recommendation-app dev
     restart: unless-stopped
+  simple-messaging-app:
+    container_name: simple-messaging-app
+    build:
+      context: ./src
+      dockerfile: apps/simple-messaging-app/Dockerfile.dev
+    env_file:
+      - ./src/apps/simple-messaging-app/.env
+    environment:
+      NODE_ENV: development
+    volumes:
+      - ./src/apps/simple-messaging-app:/usr/src/apps/simple-messaging-app
+      - ./src/common:/usr/src/common
+      - /usr/src/node_modules
+    depends_on:
+      app-db:
+        condition: service_healthy
+    command: pnpm --filter @app/simple-messaging-app dev
+    restart: unless-stopped
 volumes:
   postgres_data:

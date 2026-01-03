@@ -19,7 +19,7 @@ export class QueueFactory {
         });
 
         return new SqsAdapter(manager, options.queueName, {
-          localEndpoint: options?.localEndpoint,
+          localEndpoint: options.localEndpoint,
         });
       case 'rabbitmq':
         manager = new RabbitMqManager(options.channel);

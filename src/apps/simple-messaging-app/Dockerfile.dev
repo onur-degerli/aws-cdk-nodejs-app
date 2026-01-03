@@ -1,0 +1,14 @@
+FROM node:22-alpine
+WORKDIR /usr/src
+
+RUN corepack enable && corepack prepare pnpm@10.18.1 --activate
+
+COPY pnpm-lock.yaml pnpm-workspace.yaml package.json tsconfig.base.json ./
+COPY messaging/package.json messaging/
+COPY apps/simple-messaging-app/package.json apps/simple-messaging-app/
+RUN pnpm install --filter @app/simple-messaging-app... --frozen-lockfile
+
+COPY . .
+
+EXPOSE 3000
+CMD ["pnpm", "--filter", "@app/simple-messaging-app", "dev"]
